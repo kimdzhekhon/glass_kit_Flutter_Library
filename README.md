@@ -2,6 +2,8 @@
 
 Flutter 앱에 **초간편 글래스모피즘(Glassmorphism) 효과**를 추가할 수 있는 라이브러리입니다. `BackdropFilter`, `BoxDecoration`, `ClipRRect`, `Stack` 등을 복잡하게 조합할 필요 없이, 원하는 위젯을 감싸기만 하면 즉시 고급스러운 서리 유리(Frosted Glass) 효과가 적용됩니다.
 
+![GlassKit Showcase](screenshots/example.png)
+
 ## 🚀 도입 배경
 
 UI/UX에 민감한 플러터 개발자들을 위해 설계되었습니다. 단 하나의 위젯만 직관적으로 사용하여 최적화된 렌더링 성능으로 유리 질감, 빛 반사 테두리, 배경 흐림 처리를 한 번에 구현합니다.
