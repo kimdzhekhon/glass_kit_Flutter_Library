@@ -1,69 +1,54 @@
-# GlassKit (glass_kit 패키지)
+<div align="center">
 
-Flutter 앱에 **초간편 글래스모피즘(Glassmorphism) 효과**를 추가할 수 있는 라이브러리입니다. `BackdropFilter`, `BoxDecoration`, `ClipRRect`, `Stack` 등을 복잡하게 조합할 필요 없이, 원하는 위젯을 감싸기만 하면 즉시 고급스러운 서리 유리(Frosted Glass) 효과가 적용됩니다.
+# 🪟 GlassKit — Flutter Frosted Glass Library
 
-![GlassKit Showcase](screenshots/example.png)
+**단 하나의 위젯으로 구현하는 Frosted Glass 효과** — Flutter 미니멀 유리 효과 패키지
 
-## 🚀 도입 배경
+[![Pub.dev](https://img.shields.io/badge/pub.dev-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-UI/UX에 민감한 플러터 개발자들을 위해 설계되었습니다. 단 하나의 위젯만 직관적으로 사용하여 최적화된 렌더링 성능으로 유리 질감, 빛 반사 테두리, 배경 흐림 처리를 한 번에 구현합니다.
+![Version](https://img.shields.io/badge/version-0.0.1-blue?style=flat-square)
+![Flutter](https://img.shields.io/badge/Flutter-%3E%3D1.17.0-blue?style=flat-square)
+
+</div>
+
+---
+
+## 🌟 개요
+
+`BackdropFilter`, `Stack`, `ClipRRect`의 복잡한 조합을 추상화하여, 단 하나의 위젯으로 현대적인 Frosted Glass(반투명 유리) UI 효과를 구현하는 Flutter 패키지입니다.
+
+## 🛠 기술 스택
+
+| 영역 | 기술 |
+|------|------|
+| **언어** | Dart 3.11 |
+| **프레임워크** | Flutter ≥1.17.0 |
+| **의존성** | 외부 패키지 없음 (순수 Flutter SDK) |
 
 ## 📦 설치
 
-`pubspec.yaml` 파일에 다음을 추가해 주세요:
-
 ```yaml
 dependencies:
-  glass_kit:
-    git:
-      url: https://github.com/kimdzhekhon/glass_kit.git
+  glass_kit: ^0.0.1
 ```
 
-## 🛠 사용 방법 (Usage)
+## 🔍 핵심 기술 상세
 
-### 1. 기본 적용 (단 한 단계)
+### 구현 원리
+Flutter의 `ImageFilter.blur`를 `BackdropFilter`로 적용하여 배경을 블러 처리합니다. 내부적으로 `Stack + ClipRRect + BackdropFilter + Container`를 조합하지만, 사용자는 단일 위젯만 사용합니다.
 
-원하는 위젯을 `GlassKit`으로 감싸주기만 하면 끝납니다. 내부적으로 흐림 효과(Blur), 투명도, 테두리 반사 효과가 자동 계산되어 적용됩니다.
 ```dart
-import 'package:glass_kit/glass_kit.dart';
-
-// 기존 위젯
-// Text("Hello Glass 유리 효과")
-
-// GlassKit 적용 후
-GlassKit(
-  child: Padding(
-    padding: EdgeInsets.all(32.0),
-    child: Text(
-      "Hello Glass 유리 효과",
-      style: TextStyle(fontSize: 24, color: Colors.white),
-    ),
-  ),
+GlassContainer(
+  height: 200,
+  width: 300,
+  blur: 10,
+  color: Colors.white.withOpacity(0.1),
+  borderRadius: BorderRadius.circular(16),
+  child: YourContent(),
 )
 ```
 
-### 2. 커스터마이징 (옵션)
-
-각 속성을 입맛에 맞게 커스텀할 수 있습니다.
-```dart
-GlassKit(
-  blur: 20.0,              // 흐림 효과 강도 (기본: 10.0)
-  opacity: 0.15,           // 유리 투명도 (기본: 0.2)
-  color: Colors.white,     // 유리의 베이스 색상
-  borderRadius: 30.0,      // 모서리 둥글기 (기본: 20.0)
-  borderWidth: 1.5,        // 빛 반사 테두리 두께 (기본: 1.0)
-  child: Container(
-    width: 200,
-    height: 200,
-    alignment: Alignment.center,
-    child: Text("커스텀 GlassKit"),
-  ),
-)
-```
-
-## ⚙️ 내부 처리 프로세스 (Tech Stack)
-
-사용자에게는 단일 위젯(`GlassKit`)으로 감춰져 있지만, 내부적으로는 플러터 엔진 기능을 최적으로 조합합니다:
-* **흐림 효과 (Blur)**: `BackdropFilter`와 `ImageFilter`를 `ClipRRect` 안에 배치하여 정확한 렌더 트리 범위만 블러 처리.
-* **유리 질감 (Texture)**: 투명도가 적용된 `LinearGradient` 레이어를 사용하여 대각선 빛 반사가 일어나는 유리의 입체적인 질감 구현.
-* **빛 반사 테두리 (Border)**: `BoxDecoration`의 `Border.all`을 투명한 흰색(`Colors.white.withOpacity(0.3)`)과 조합하여, 깎인듯한 모서리에 맺히는 빛 반사 시각화.
+### 렌더링 성능
+BackdropFilter는 GPU 집약적 연산입니다. GlassKit은 필요한 경우에만 blur 레이어를 활성화하도록 설계되어 불필요한 렌더링 오버헤드를 방지합니다.
